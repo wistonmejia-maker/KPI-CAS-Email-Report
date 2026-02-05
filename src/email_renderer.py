@@ -149,7 +149,7 @@ def generar_html_profesional(df, deltas=None, region="CAS"):
         
         if region_col:
             # Mapeo simple o uso directo si los valores coinciden
-            filter_val = "Spanish Latam" if region == "CAS" else region
+            filter_val = region # Usar valor directo (Data tiene "CAS", "Brasil", etc.)
             
             # Filtrado insensible a mayusculas
             # Normalizar columna y valor filtro
