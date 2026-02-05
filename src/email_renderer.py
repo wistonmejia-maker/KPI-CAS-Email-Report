@@ -253,7 +253,7 @@ def generar_html_profesional(df, deltas=None, region="CAS"):
                     <tr>
                         <td style="background:linear-gradient(135deg, #003764 0%, #001a30 100%); padding:40px 32px; text-align:center;">
                             <p style="margin:0 0 12px 0; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.6); font-weight:600;">
-                                KPI Data Cleansing CAS • 2026
+                                KPI Data Cleansing {region if region and region != "Todas" else "Global"} • 2026
                             </p>
                             <h1 style="margin:0 0 8px 0; font-size:56px; font-weight:800; color:#ffffff; line-height:1;">
                                 {total_opps:,}
