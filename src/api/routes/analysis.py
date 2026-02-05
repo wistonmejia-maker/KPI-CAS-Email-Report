@@ -10,8 +10,10 @@ from typing import Optional
 import threading
 import logging
 
-from fastapi import APIRouter, HTTPException, BackgroundTasks
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, HTTPException, BackgroundTasks, UploadFile, File
+from fastapi.responses import FileResponse, HTMLResponse
+import shutil
+import os
 
 # Agregar path del proyecto para imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
@@ -26,7 +28,16 @@ from src.data_loader import DataLoader, load_opportunities
 from src.change_detector import compare_datasets
 from src.metrics import MetricsCalculator
 from src.report_generator import generate_weekly_report
-from src.html_report_generator import generate_executive_html
+# Reemplazamos el generador antiguo por el nuevo que tiene el branding correcto
+# Como generar_resumen_email.py está en la raíz, lo importamos dinámicamente o asumiendo que está en el path
+try:
+    from generar_resumen_email import generar_html_profesional, calcular_deltas
+except ImportError:
+    # Fallback por si la estructura de importación falla en dev vs prod
+    import sys
+    sys.path.append(str(Path(__file__).parent.parent.parent.parent))
+    from generar_resumen_email import generar_html_profesional, calcular_deltas
+    
 from src.infographic.visual_card import generate_executive_card
 
 logger = logging.getLogger(__name__)
@@ -262,3 +273,77 @@ async def get_job_card(job_id: str):
     except Exception as e:
         logger.error(f"Error generando tarjeta para job {job_id}: {e}")
         raise HTTPException(status_code=500, detail=f"Error generando visual: {str(e)}")
+
+@router.post("/upload-and-analyze", response_class=HTMLResponse)
+async def upload_and_analyze(
+    current_file: UploadFile = File(...),
+    previous_file: Optional[UploadFile] = File(None)
+):
+    """
+    Recibe archivos CSV (actual y opcional previo), ejecuta el análisis 
+    y retorna el reporte HTML directamente.
+    
+    Ideal para uso "stateless" en vercel.
+    """
+    try:
+        # 1. Definir directorio temporal
+        # En Vercel solo /tmp es escribible
+        temp_dir = Path("/tmp") if os.path.exists("/tmp") else Path("temp_uploads")
+        temp_dir.mkdir(exist_ok=True)
+        
+        current_path = temp_dir / f"current_{datetime.now().timestamp()}.csv"
+        previous_path = None
+        
+        # 2. Guardar archivo actual
+        with current_path.open("wb") as buffer:
+            shutil.copyfileobj(current_file.file, buffer)
+            
+        # 3. Guardar archivo previo (si existe)
+        if previous_file:
+            previous_path = temp_dir / f"previous_{datetime.now().timestamp()}.csv"
+            with previous_path.open("wb") as buffer:
+                shutil.copyfileobj(previous_file.file, buffer)
+                
+        # 4. Cargar datos
+        loader = DataLoader()
+        df = loader.load_csv(current_path)
+        
+        # 5. Comparar (si aplica)
+        # 5. Calcular Deltas (usando la lógica de generar_resumen_email)
+        deltas = None
+        if previous_path:
+            try:
+                previous_df = loader.load_csv(previous_path)
+                deltas = calcular_deltas(df, previous_df)
+            except Exception as e:
+                logger.warning(f"Error calculando deltas: {e}")
+                # Si falla, calculamos deltas vacios (None como segundo argumento retorna estructura vacía/default)
+                deltas = calcular_deltas(df, None)
+        else:
+            deltas = calcular_deltas(df, None)
+                
+        # 6. Generar HTML (Profesional / Email)
+        # generar_html_profesional devuelve el string directamente
+        html_content = generar_html_profesional(df, deltas)
+        
+        # 7. Limpieza
+        try:
+            current_path.unlink()
+            if previous_path:
+                previous_path.unlink()
+        except Exception:
+            pass
+            
+        return HTMLResponse(content=html_content)
+
+    except Exception as e:
+        import traceback
+        error_msg = f"Error en upload_and_analyze: {str(e)}\n{traceback.format_exc()}"
+        logger.error(error_msg)
+        print(error_msg)
+        
+        # Fallback logging to file
+        with open("error_log.txt", "w", encoding="utf-8") as f:
+            f.write(error_msg)
+            
+        raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")

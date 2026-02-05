@@ -117,25 +117,37 @@ def calcular_deltas(df_actual, df_anterior):
     }
 
 
-def formato_delta(delta, invertir=False):
-    """Genera HTML para mostrar un delta con color y flecha estilo badge"""
-    if delta is None:
+def formato_delta(delta, invertir=False, on_dark=False):
+    """Genera HTML para mostrar un delta con un estilo de 'Pill Badge' profesional"""
+    if delta is None or delta == 0:
         return ''
     
-    if delta == 0:
-        return ''
+    # Colores base
+    is_positive = delta > 0
     
-    # Para oportunidades: aumentar es malo (rojo), disminuir es bueno (verde)
-    # invertir=True para casos donde aumentar es bueno
+    # Lógica de semáforo: para oportunidades, aumentar (+) suele ser malo (rojo)
+    # y disminuir (-) es bueno (verde). invertir=True cambia esto.
     if invertir:
-        color = '#059669' if delta > 0 else '#E21F26'  # Verde si sube, Rojo ATC si baja
+        is_good = is_positive
     else:
-        color = '#E21F26' if delta > 0 else '#059669'  # Rojo ATC si sube, verde si baja
+        is_good = not is_positive
+
+    if is_good:
+        bg_color = 'rgba(5, 150, 105, 0.15)' if not on_dark else 'rgba(255, 255, 255, 0.15)'
+        text_color = '#059669' if not on_dark else '#ffffff'
+    else:
+        bg_color = 'rgba(226, 31, 38, 0.15)' if not on_dark else 'rgba(255, 255, 255, 0.2)'
+        text_color = '#E21F26' if not on_dark else '#ffffff'
     
-    arrow = '↑' if delta > 0 else '↓'
-    sign = '+' if delta > 0 else ''
+    arrow = '↑' if is_positive else '↓'
+    sign = '+' if is_positive else ''
     
-    return f'<span style="color:{color}; font-size:9px; font-weight:600;">{sign}{delta}{arrow}</span>'
+    # Estilo del Badge (Pill)
+    return f'''<span style="display:inline-block; background-color:{bg_color}; color:{text_color}; 
+                             padding:2px 8px; border-radius:12px; font-size:10px; font-weight:700; 
+                             white-space:nowrap; vertical-align:middle; margin:0 4px;">
+                {sign}{abs(delta)}<span style="font-size:11px; margin-left:2px;">{arrow}</span>
+              </span>'''
 
 
 def generar_html_profesional(df, deltas=None):
@@ -231,7 +243,7 @@ def generar_html_profesional(df, deltas=None):
                                 Oportunidades Activas
                             </p>
                             <p style="margin:0; font-size:14px; color:rgba(255,255,255,0.65);">
-                                {formato_delta(deltas['total']) if deltas['total'] is not None else ''} vs reporte anterior
+                                {formato_delta(deltas['total'], on_dark=True) if deltas['total'] is not None else ''} vs reporte anterior
                             </p>
                         </td>
                     </tr>

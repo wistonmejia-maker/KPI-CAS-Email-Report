@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPI CAS | Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #003764;
+            --accent: #E21F26;
+            --surface: rgba(255, 255, 255, 0.9);
+            --glass: rgba(255, 255, 255, 0.7);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            color: #1a202c;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 20px 0;
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        main {
+            margin-top: 100px;
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .upload-card {
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        h2 {
+            margin: 0 0 16px 0;
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        p.subtitle {
+            margin: 0 0 32px 0;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .file-drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .file-drop-zone:hover,
+        .file-drop-zone.dragover {
+            border-color: var(--primary);
+            background: rgba(0, 55, 100, 0.05);
+        }
+
+        .file-drop-zone h3 {
+            margin: 10px 0 5px 0;
+            font-size: 16px;
+            color: var(--primary);
+        }
+
+        .file-drop-zone p {
+            margin: 0;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .icon-upload {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-info {
+            display: none;
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .optional-section {
+            margin-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 20px;
+        }
+
+        .optional-toggle {
+            font-size: 14px;
+            color: #64748b;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .actions {
+            margin-top: 32px;
+        }
+
+        button.btn-primary {
+            background: linear-gradient(135deg, #003764 0%, #001a30 100%);
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 100px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 55, 100, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        button.btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 55, 100, 0.4);
+        }
+
+        button.btn-primary:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Result Area */
+        .result-container {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            background: white;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            margin: 20px auto;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 55, 100, 0.1);
+            border-left-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">KPI <span>CAS</span></div>
+    </header>
+
+    <main>
+        <div class="upload-card" id="uploadCard">
+            <h2>Generar Reporte Ejecutivo</h2>
+            <p class="subtitle">Sube tu archivo CSV de Salesforce para generar el resumen automáticamente.</p>
+
+            <!-- Current File -->
+            <div class="file-drop-zone" id="dropZoneCurrent">
+                <div class="icon-upload">📄</div>
+                <h3>Archivo Actual (CSV)</h3>
+                <p>Arrastra o haz clic para seleccionar</p>
+                <input type="file" id="currentFile" accept=".csv">
+                <div class="file-info" id="currentInfo"></div>
+            </div>
+
+            <!-- Optional Previous File -->
+            <div class="optional-section">
+                <p class="optional-toggle"
+                    onclick="document.getElementById('prevContainer').style.display='block'; this.style.display='none'">
+                    + Comparar con periodo anterior (Opcional)
+                </p>
+                <div class="file-drop-zone" id="prevContainer" style="display:none; margin-top:15px;">
+                    <div class="icon-upload">📅</div>
+                    <h3>Archivo Anterior (CSV)</h3>
+                    <p>Para calcular deltas y cambios</p>
+                    <input type="file" id="prevFile" accept=".csv">
+                    <div class="file-info" id="prevInfo"></div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn-primary" id="generateBtn" disabled>Generar Reporte</button>
+            </div>
+
+            <div class="spinner" id="loadingSpinner"></div>
+        </div>
+
+        <div class="result-container" id="resultContainer">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h3 style="color:#64748b; font-size:14px; text-transform:uppercase; letter-spacing:1px; margin:0;">Vista
+                    Previa</h3>
+                <button id="copyBtn"
+                    style="background:#003764; color:white; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:6px;">
+                    📋 Copiar para Outlook
+                </button>
+            </div>
+            <iframe id="reportFrame"></iframe>
+            <div style="text-align:center; margin-top:20px;">
+                <button onclick="window.location.reload()"
+                    style="background:none; border:none; color:#64748b; cursor:pointer; text-decoration:underline;">Generar
+                    otro</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const currentFile = document.getElementById('currentFile');
+        const prevFile = document.getElementById('prevFile');
+        const generateBtn = document.getElementById('generateBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const resultContainer = document.getElementById('resultContainer');
+        const reportFrame = document.getElementById('reportFrame');
+        const uploadCard = document.getElementById('uploadCard');
+
+        // File Selection Handlers
+        currentFile.addEventListener('change', (e) => updateFileInfo(e.target, 'currentInfo'));
+        prevFile.addEventListener('change', (e) => updateFileInfo(e.target, 'prevInfo'));
+
+        function updateFileInfo(input, infoId) {
+            const info = document.getElementById(infoId);
+            if (input.files && input.files[0]) {
+                info.textContent = "✅ " + input.files[0].name;
+                info.style.display = 'block';
+                input.parentElement.style.borderColor = '#059669';
+                input.parentElement.style.background = 'rgba(5, 150, 105, 0.05)';
+            }
+            checkForm();
+        }
+
+        function checkForm() {
+            generateBtn.disabled = !currentFile.files[0];
+        }
+
+        // Drag and Drop Visuals
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            document.querySelectorAll('.file-drop-zone').forEach(zone => {
+                zone.addEventListener(eventName, preventDefaults, false);
+            });
+        });
+
+        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+
+        document.querySelectorAll('.file-drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', () => zone.classList.add('dragover'));
+            zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+            zone.addEventListener('drop', () => zone.classList.remove('dragover'));
+        });
+
+
+        // Submit Handler
+        generateBtn.addEventListener('click', async () => {
+            if (!currentFile.files[0]) return;
+
+            // UI State
+            generateBtn.style.display = 'none';
+            loadingSpinner.style.display = 'block';
+            resultContainer.style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('current_file', currentFile.files[0]);
+
+            if (prevFile.files[0]) {
+                formData.append('previous_file', prevFile.files[0]);
+            }
+
+            try {
+                const response = await fetch('/api/v1/analysis/upload-and-analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Error generando reporte');
+
+                const htmlContent = await response.text();
+
+                // Display Result
+                reportFrame.srcdoc = htmlContent;
+                resultContainer.style.display = 'block';
+                uploadCard.style.display = 'none'; // Hide upload to focus on result
+
+            } catch (error) {
+                console.error(error);
+                alert('Error al generar el reporte. Verifica el archivo CSV.');
+                generateBtn.style.display = 'inline-block';
+                generateBtn.disabled = false;
+            } finally {
+                loadingSpinner.style.display = 'none';
+            }
+        });
+        // Copy Handler
+        const copyBtn = document.getElementById('copyBtn');
+        copyBtn.addEventListener('click', () => {
+            const iframeWindow = reportFrame.contentWindow;
+            const iframeDoc = reportFrame.contentDocument || iframeWindow.document;
+
+            // Focus iframe to ensure execCommand works
+            iframeWindow.focus();
+
+            // Select all content in iframe
+            const selection = iframeWindow.getSelection();
+            const range = iframeDoc.createRange();
+            range.selectNodeContents(iframeDoc.body);
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            try {
+                // Execute copy
+                const successful = iframeDoc.execCommand('copy');
+                if (successful) {
+                    copyBtn.textContent = "✅ ¡Copiado!";
+                    copyBtn.style.background = "#059669";
+                    setTimeout(() => {
+                        copyBtn.innerHTML = "📋 Copiar para Outlook";
+                        copyBtn.style.background = "#003764";
+                        selection.removeAllRanges(); // Deselect after delay so user sees what happened
+                    }, 2000);
+                } else {
+                    throw new Error('Copy command failed');
+                }
+            } catch (err) {
+                console.error('Error al copiar:', err);
+                alert('No se pudo copiar automáticamente. Por favor haz clic DENTRO del reporte, presiona Ctrl+A y luego Ctrl+C.');
+            }
+        });
+
+    </script>
+</body>
+
+</html>

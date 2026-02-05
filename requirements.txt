@@ -1,24 +1,8 @@
-# Dependencias del proyecto
-# Sistema de Seguimiento de KPIs - Oportunidades Salesforce
-
-# Core
-pandas>=1.5.0
-numpy>=1.21.0
-
-# Excel
-openpyxl>=3.0.0
-
-# Visualización (para reportes HTML con gráficos)
-matplotlib>=3.5.0
-
-# Logging y utilidades
-python-dateutil>=2.8.0
-
-# API REST (Fase 1 SaaS)
+pandas>=2.0.0
+openpyxl>=3.1.0
+Jinja2>=3.1.0
+matplotlib>=3.7.0
 fastapi>=0.100.0
 uvicorn>=0.23.0
-python-multipart>=0.0.6
 pydantic>=2.0.0
-
-# Infographics (Fase 2 SaaS)
-imgkit>=1.2.3
+python-multipart>=0.0.6

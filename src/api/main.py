@@ -18,6 +18,7 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 # Agregar path del proyecto
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -78,6 +79,10 @@ app.add_middleware(
 
 # Incluir router de análisis
 app.include_router(analysis_router)
+
+# Mount static files (Frontend)
+# Esto permite servir public/index.html en /
+app.mount("/", StaticFiles(directory="public", html=True), name="public")
 
 
 @app.get("/", tags=["Root"])
