@@ -280,7 +280,7 @@ def generar_html_profesional(df, deltas=None, region="CAS"):
                                                     <div style="margin-bottom:8px;">
                                                         <span style="display:inline-block; width:32px; height:32px; line-height:32px; background-color:#f1f5f9; border-radius:50%; color:#003764; font-size:16px;">🌐</span>
                                                     </div>
-                                                    <p style="margin:0 0 2px 0; font-size:10px; text-transform:uppercase; color:#64748b; letter-spacing:1px; font-weight:700;">Opps por Pais</p>
+                                                    <p style="margin:0 0 2px 0; font-size:10px; text-transform:uppercase; color:#64748b; letter-spacing:1px; font-weight:700;">Países</p>
                                                     <p style="margin:0; font-size:28px; font-weight:800; color:#003764;">{total_paises}</p>
                                                 </td>
                                             </tr>
@@ -294,7 +294,7 @@ def generar_html_profesional(df, deltas=None, region="CAS"):
                                                     <div style="margin-bottom:8px;">
                                                         <span style="display:inline-block; width:32px; height:32px; line-height:32px; background-color:#f1f5f9; border-radius:50%; color:#003764; font-size:16px;">👥</span>
                                                     </div>
-                                                    <p style="margin:0 0 2px 0; font-size:10px; text-transform:uppercase; color:#64748b; letter-spacing:1px; font-weight:700;">Opps por Resp.</p>
+                                                    <p style="margin:0 0 2px 0; font-size:10px; text-transform:uppercase; color:#64748b; letter-spacing:1px; font-weight:700;">Responsables</p>
                                                     <p style="margin:0; font-size:28px; font-weight:800; color:#003764;">{total_responsables}</p>
                                                 </td>
                                             </tr>
@@ -308,7 +308,7 @@ def generar_html_profesional(df, deltas=None, region="CAS"):
                                                     <div style="margin-bottom:8px;">
                                                         <span style="display:inline-block; width:32px; height:32px; line-height:32px; background-color:#f1f5f9; border-radius:50%; color:#003764; font-size:16px;">📊</span>
                                                     </div>
-                                                    <p style="margin:0 0 2px 0; font-size:10px; text-transform:uppercase; color:#64748b; letter-spacing:1px; font-weight:700;">Opps por KPI</p>
+                                                    <p style="margin:0 0 2px 0; font-size:10px; text-transform:uppercase; color:#64748b; letter-spacing:1px; font-weight:700;">KPIs Detectados</p>
                                                     <p style="margin:0; font-size:28px; font-weight:800; color:#003764;">{total_kpis}</p>
                                                 </td>
                                             </tr>
