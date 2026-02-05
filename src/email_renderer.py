@@ -125,19 +125,24 @@ def formato_delta(delta, invertir=False, on_dark=False):
               </span>'''
 
 
-def generar_html_profesional(df, deltas=None):
+def generar_html_profesional(df, deltas=None, region="Spanish Latam"):
     """
     Genera HTML con diseño VisActor para email ejecutivo.
-    Incluye matriz Responsable×KPI con semáforo, CTA y comparativa con datos anteriores.
-    Compatible con Outlook: 600px fijo, CSS inline, tablas para layout.
+    Incluye opción de filtro por Región.
     """
     if deltas is None:
         deltas = {'total': None, 'por_responsable': {}, 'por_pais': {}, 'por_kpi': {}}
     fecha = datetime.now().strftime("%d/%m/%Y")
     trimestre = f"Q{(datetime.now().month - 1) // 3 + 1} {datetime.now().year}"
     
-    # Excluir Brasil y Mexico
-    df = df[~df['Market'].isin(['Brasil', 'Mexico'])]
+    # Filtrar por Región (si aplica y si existe la columna)
+    if region and region != "Todas" and 'Region' in df.columns:
+        # Mapeo simple o uso directo si los valores coinciden
+        # Asumiendo que "Spanish Latam" es el valor exacto en la data
+        df = df[df['Region'] == region]
+    elif not 'Region' in df.columns and region == "Spanish Latam":
+        # Fallback si no hay columna Region pero se pide Spanish Latam (excluir BR/MX)
+        df = df[~df['Market'].isin(['Brasil', 'Mexico'])]
     
     total_opps = len(df)
     total_responsables = df['Responsible'].nunique()

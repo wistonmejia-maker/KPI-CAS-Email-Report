@@ -251,6 +251,20 @@
                 <p>Arrastra o haz clic para seleccionar</p>
                 <input type="file" id="currentFile" accept=".csv">
                 <div class="file-info" id="currentInfo"></div>
+
+                <!-- Region Filter -->
+                <div style="margin-top:16px; border-top:1px dashed #cbd5e1; padding-top:12px; text-align:left;">
+                    <label
+                        style="font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:4px;">Filtrar
+                        Región (Opcional)</label>
+                    <select id="regionFilter"
+                        style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; color:#0f172a; outline:none;">
+                        <option value="Spanish Latam" selected>Spanish Latam (Sin Brasil/Mexico)</option>
+                        <option value="Brasil">Brasil</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="Todas">Todas las Regiones</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Optional Previous File -->
@@ -348,6 +362,10 @@
 
             const formData = new FormData();
             formData.append('current_file', currentFile.files[0]);
+
+            // Add Region
+            const region = document.getElementById('regionFilter').value;
+            formData.append('region', region);
 
             if (prevFile.files[0]) {
                 formData.append('previous_file', prevFile.files[0]);

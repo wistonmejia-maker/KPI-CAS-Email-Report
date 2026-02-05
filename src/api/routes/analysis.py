@@ -109,7 +109,7 @@ def run_analysis_task(job_id: str, request: AnalysisRequest):
         
         if request.generate_html:
             try:
-                html_path = str(generate_executive_html(df, comparison))
+                html_path = str(generate_executive_html(df, comparison, region=request.region))
             except Exception as e:
                 logger.warning(f"Error generando HTML: {e}")
         
