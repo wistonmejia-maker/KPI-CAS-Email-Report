@@ -285,7 +285,7 @@ def generar_html_profesional(df, deltas=None):
                                             👤 Distribución de Oportunidades por Responsable
                                         </p>
                                         <p style="margin:4px 0 0 0; font-size:12px; color:#64748b;">
-                                            Oportunidades asignadas por analista
+                                            
                                         </p>
                                     </td>
                                 </tr>
