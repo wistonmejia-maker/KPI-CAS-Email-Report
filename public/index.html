@@ -359,7 +359,16 @@
                     body: formData
                 });
 
-                if (!response.ok) throw new Error('Error generando reporte');
+                if (!response.ok) {
+                    let errorMsg = 'Error generando reporte';
+                    try {
+                        const errData = await response.json();
+                        if (errData.detail) errorMsg = errData.detail;
+                    } catch (e) {
+                        errorMsg = await response.text();
+                    }
+                    throw new Error(errorMsg);
+                }
 
                 const htmlContent = await response.text();
 
@@ -370,7 +379,7 @@
 
             } catch (error) {
                 console.error(error);
-                alert('Error al generar el reporte. Verifica el archivo CSV.');
+                alert(`Error del servidor:\n${error.message}`);
                 generateBtn.style.display = 'inline-block';
                 generateBtn.disabled = false;
             } finally {
