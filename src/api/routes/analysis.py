@@ -24,14 +24,20 @@ from src.api.models import (
 )
 from src.api.jobs import job_manager, JobStatus
 from src.config import KPI_CATEGORIES, COLUMNS, SNAPSHOTS_DIR
-from src.data_loader import DataLoader, load_opportunities
-from src.change_detector import compare_datasets
-from src.metrics import MetricsCalculator
-from src.email_renderer import generar_html_profesional, calcular_deltas
+# Lazy imports for heavy libs to avoid serverless cold start crash
+# from src.data_loader import DataLoader, load_opportunities
+# from src.change_detector import compare_datasets
+# from src.metrics import MetricsCalculator
+# from src.email_renderer import generar_html_profesional, calcular_deltas
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/v1/analysis", tags=["Analysis"])
+
+@router.get("/ping")
+async def ping():
+    """Endpoint ligero para verificar estado del servidor"""
+    return {"status": "ok", "timestamp": datetime.now().isoformat()}
 
 
 def run_analysis_task(job_id: str, request: AnalysisRequest):
@@ -41,6 +47,13 @@ def run_analysis_task(job_id: str, request: AnalysisRequest):
     """
     try:
         job_manager.update_status(job_id, JobStatus.RUNNING, progress="Cargando datos...")
+        
+        # Lazy import
+        from src.data_loader import DataLoader
+        from src.metrics import MetricsCalculator
+        from src.change_detector import compare_datasets
+        from src.email_renderer import generate_weekly_report
+        from src.infographic.visual_card import generate_executive_card
         
         loader = DataLoader()
         
@@ -275,6 +288,10 @@ async def upload_and_analyze(
     Ideal para uso "stateless" en vercel.
     """
     try:
+        # Lazy imports
+        from src.data_loader import DataLoader
+        from src.email_renderer import generar_html_profesional, calcular_deltas
+        
         # 1. Definir directorio temporal
         # En Vercel solo /tmp es escribible
         temp_dir = Path("/tmp") if os.path.exists("/tmp") else Path("temp_uploads")
