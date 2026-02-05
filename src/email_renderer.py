@@ -638,13 +638,13 @@ def generar_html_profesional(df, deltas=None):
                 // Capturar específicamente el contenedor del reporte
                 const element = document.getElementById('email-report');
                 
-                // ⚡ TRUCO: Anchar temporalmente para que la imagen no se vea "angosta" en desktop
+                // ⚡ TRUCO: Anchar temporalmente (750px es el punto dulce entre "muy angosto" y "letra muy chica")
                 const originalWidth = element.style.width;
-                element.style.width = '1000px'; 
-                element.setAttribute('width', '1000'); // Forzar atributo también
+                element.style.width = '750px'; 
+                element.setAttribute('width', '750'); 
                 
                 const canvas = await html2canvas(element, {
-                    scale: 2, // Retina
+                    scale: 3, // Ultra calidad
                     useCORS: true,
                     backgroundColor: null,
                 });
