@@ -136,15 +136,25 @@ def generar_html_profesional(df, deltas=None, region="CAS"):
     trimestre = f"Q{(datetime.now().month - 1) // 3 + 1} {datetime.now().year}"
     
     # Filtrar por Región (si aplica y si existe la columna)
-    if region and region != "Todas" and 'Region' in df.columns:
-        # Mapeo simple o uso directo si los valores coinciden
-        # Asumiendo que "CAS" es el valor exacto en la data si se usa ese filtro
-        # Si la data usa "Spanish Latam" pero la UI dice "CAS", aqui deberiamos ajustar
-        filter_val = "Spanish Latam" if region == "CAS" else region
-        df = df[df['Region'] == filter_val]
-    elif not 'Region' in df.columns and region == "CAS":
-        # Fallback si no hay columna Region pero se pide CAS (excluir BR/MX)
-        df = df[~df['Market'].isin(['Brasil', 'Mexico'])]
+    if region and region != "Todas":
+        # Buscar columna de Region (case-insensitive y acentos)
+        region_col = None
+        for col in df.columns:
+            if col.lower() in ['region', 'región', 'market region', 'region (market)']:
+                region_col = col
+                break
+        
+        if region_col:
+            # Mapeo simple o uso directo si los valores coinciden
+            filter_val = "Spanish Latam" if region == "CAS" else region
+            
+            # Filtrado insensible a mayusculas
+            # Normalizar columna y valor filtro
+            mask = df[region_col].astype(str).str.lower().str.strip() == filter_val.lower().strip()
+            df = df[mask]
+        elif region == "CAS":
+            # Fallback si no hay columna Region pero se pide CAS (excluir BR/MX)
+            df = df[~df['Market'].isin(['Brasil', 'Mexico'])]
     
     total_opps = len(df)
     total_responsables = df['Responsible'].nunique()
