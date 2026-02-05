@@ -203,7 +203,7 @@ def generar_html_profesional(df, deltas=None):
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f8fafc;">
         <tr>
             <td align="center" style="padding:24px 16px;">
-                <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="background-color:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+                <table id="email-report" role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="background-color:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
                     
                     <!-- HEADER -->
                     <tr>
@@ -596,6 +596,94 @@ def generar_html_profesional(df, deltas=None):
 </body>
 </html>'''
     
+
+    
+    # Inyectar script de captura de imagen (html2canvas) y botón flotante
+    script_captura = '''
+    <!-- HTML2CANVAS & COPY BUTTON -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <div id="action-buttons" style="position:fixed; top:20px; right:20px; z-index:2147483647; display:flex; gap:10px;">
+        <button onclick="copiarImagen()" style="
+            background-color: #E21F26; 
+            color: white; 
+            border: 2px solid white; 
+            padding: 16px 32px; 
+            border-radius: 50px; 
+            font-family: Arial, sans-serif; 
+            font-size: 16px;
+            font-weight: bold; 
+            cursor: pointer; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            <span style="font-size:20px">📸</span> COPIAR IMAGEN
+        </button>
+    </div>
+
+    <script>
+        async function copiarImagen() {
+            const btn = document.querySelector('button');
+            const originalText = btn.innerHTML;
+            
+            try {
+                btn.innerHTML = '⏳ Generando...';
+                document.getElementById('action-buttons').style.display = 'none'; // Ocultar botón
+                
+                // Forzar rendering de fuentes y esperar
+                await document.fonts.ready;
+                
+                // Capturar específicamente el contenedor del reporte
+                const element = document.getElementById('email-report');
+                
+                // ⚡ TRUCO: Anchar temporalmente para que la imagen no se vea "angosta" en desktop
+                const originalWidth = element.style.width;
+                element.style.width = '1000px'; 
+                element.setAttribute('width', '1000'); // Forzar atributo también
+                
+                const canvas = await html2canvas(element, {
+                    scale: 2, // Retina
+                    useCORS: true,
+                    backgroundColor: null,
+                });
+                
+                // Restaurar ancho original
+                element.style.width = originalWidth;
+                element.setAttribute('width', '600');
+                
+                document.getElementById('action-buttons').style.display = 'flex'; // Mostrar botón
+                
+                canvas.toBlob(async (blob) => {
+                    try {
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        await navigator.clipboard.write([item]);
+                        btn.innerHTML = '✅ Copiado!';
+                        btn.style.backgroundColor = '#10b981';
+                        setTimeout(() => {
+                            btn.innerHTML = originalText;
+                            btn.style.backgroundColor = '#0f172a';
+                        }, 2000);
+                    } catch (err) {
+                        console.error(err);
+                        alert('Error al copiar: ' + err);
+                        btn.innerHTML = '❌ Error';
+                    }
+                });
+                
+            } catch (error) {
+                console.error(error);
+                alert('Error generando imagen: ' + error);
+                document.getElementById('action-buttons').style.display = 'flex';
+                btn.innerHTML = '❌ Error';
+            }
+        }
+    </script>
+    </body>
+    '''
+    
+    html = html.replace('</body>', script_captura)
     return html
 
 
