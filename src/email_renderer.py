@@ -638,20 +638,11 @@ def generar_html_profesional(df, deltas=None):
                 // Capturar específicamente el contenedor del reporte
                 const element = document.getElementById('email-report');
                 
-                // ⚡ TRUCO: Anchar temporalmente (750px es el punto dulce entre "muy angosto" y "letra muy chica")
-                const originalWidth = element.style.width;
-                element.style.width = '750px'; 
-                element.setAttribute('width', '750'); 
-                
                 const canvas = await html2canvas(element, {
                     scale: 3, // Ultra calidad
                     useCORS: true,
                     backgroundColor: null,
                 });
-                
-                // Restaurar ancho original
-                element.style.width = originalWidth;
-                element.setAttribute('width', '600');
                 
                 document.getElementById('action-buttons').style.display = 'flex'; // Mostrar botón
                 
