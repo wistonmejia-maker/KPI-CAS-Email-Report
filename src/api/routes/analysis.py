@@ -28,16 +28,7 @@ from src.data_loader import DataLoader, load_opportunities
 from src.change_detector import compare_datasets
 from src.metrics import MetricsCalculator
 from src.report_generator import generate_weekly_report
-# Reemplazamos el generador antiguo por el nuevo que tiene el branding correcto
-# Como generar_resumen_email.py está en la raíz, lo importamos dinámicamente o asumiendo que está en el path
-try:
-    from generar_resumen_email import generar_html_profesional, calcular_deltas
-except ImportError:
-    # Fallback por si la estructura de importación falla en dev vs prod
-    import sys
-    sys.path.append(str(Path(__file__).parent.parent.parent.parent))
-    from generar_resumen_email import generar_html_profesional, calcular_deltas
-    
+from src.email_renderer import generar_html_profesional, calcular_deltas
 from src.infographic.visual_card import generate_executive_card
 
 logger = logging.getLogger(__name__)
@@ -341,9 +332,4 @@ async def upload_and_analyze(
         error_msg = f"Error en upload_and_analyze: {str(e)}\n{traceback.format_exc()}"
         logger.error(error_msg)
         print(error_msg)
-        
-        # Fallback logging to file
-        with open("error_log.txt", "w", encoding="utf-8") as f:
-            f.write(error_msg)
-            
         raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
