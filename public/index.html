@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KPI CAS | Generator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --primary: #003764;
@@ -300,6 +301,10 @@
                     style="background:#003764; color:white; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:6px;">
                     📋 Copiar para Outlook
                 </button>
+                <button id="copyImgBtn"
+                    style="background:#E21F26; color:white; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:6px; margin-left:10px;">
+                    📸 Copiar Imagen
+                </button>
             </div>
             <iframe id="reportFrame"></iframe>
             <div style="text-align:center; margin-top:20px;">
@@ -444,6 +449,62 @@
                 alert('No se pudo copiar automáticamente. Por favor haz clic DENTRO del reporte, presiona Ctrl+A y luego Ctrl+C.');
             }
         });
+
+        // Copy Image Handler
+        const copyImgBtn = document.getElementById('copyImgBtn');
+        copyImgBtn.addEventListener('click', async () => {
+            const iframe = document.getElementById('reportFrame');
+            const originalText = copyImgBtn.innerHTML;
+
+            try {
+                // Check if iframe has content
+                if (!iframe.contentDocument || !iframe.contentDocument.getElementById('email-report')) {
+                    alert('No hay reporte generado para capturar.');
+                    return;
+                }
+
+                copyImgBtn.innerHTML = '⏳ Generando...';
+                copyImgBtn.disabled = true;
+
+                // Wait for fonts inside iframe
+                await iframe.contentDocument.fonts.ready;
+
+                const element = iframe.contentDocument.getElementById('email-report');
+
+                const canvas = await html2canvas(element, {
+                    scale: 3, // Ultra high quality
+                    useCORS: true,
+                    backgroundColor: null
+                });
+
+                canvas.toBlob(async (blob) => {
+                    try {
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        await navigator.clipboard.write([item]);
+                        copyImgBtn.innerHTML = '✅ ¡Copiado!';
+                        copyImgBtn.style.background = '#10b981';
+
+                        setTimeout(() => {
+                            copyImgBtn.innerHTML = originalText;
+                            copyImgBtn.style.background = '#E21F26';
+                            copyImgBtn.disabled = false;
+                        }, 2000);
+                    } catch (err) {
+                        console.error(err);
+                        alert('Error escribiendo en portapapeles: ' + err);
+                        copyImgBtn.innerHTML = '❌ Error';
+                        copyImgBtn.disabled = false;
+                    }
+                });
+
+            } catch (error) {
+                console.error(error);
+                alert('Error generando imagen: ' + error);
+                copyImgBtn.innerHTML = originalText;
+                copyImgBtn.disabled = false;
+            }
+        });
+
 
     </script>
 </body>
