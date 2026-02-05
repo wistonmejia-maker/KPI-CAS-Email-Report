@@ -147,7 +147,7 @@ def generar_html_profesional(df, deltas=None, region="CAS"):
                 region_col = col
                 break
         
-        if region_col:
+        if region_col and region != "Todas":
             # Mapeo simple o uso directo si los valores coinciden
             filter_val = region # Usar valor directo (Data tiene "CAS", "Brasil", etc.)
             
@@ -407,6 +407,9 @@ def generar_html_profesional(df, deltas=None, region="CAS"):
     # Generar filas de países - usar imágenes de banderas para compatibilidad con Outlook
     COUNTRY_CODES = {
         'Chile': 'cl',
+        'Brasil': 'br',
+        'Mexico': 'mx',
+        'México': 'mx',
         'Peru': 'pe',
         'Colombia': 'co',
         'Paraguay': 'py',
