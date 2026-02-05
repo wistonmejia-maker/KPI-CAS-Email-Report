@@ -361,11 +361,13 @@
 
                 if (!response.ok) {
                     let errorMsg = 'Error generando reporte';
+                    const errorText = await response.text();
                     try {
-                        const errData = await response.json();
+                        const errData = JSON.parse(errorText);
                         if (errData.detail) errorMsg = errData.detail;
                     } catch (e) {
-                        errorMsg = await response.text();
+                        // If not JSON, use the raw text if available
+                        if (errorText) errorMsg = errorText;
                     }
                     throw new Error(errorMsg);
                 }
