@@ -1,0 +1,111 @@
+============================================================
+RESUMEN DE OPORTUNIDADES - 03/02/2026
+============================================================
+
+📊 TOTALES GENERALES
+   Oportunidades: 1,523
+   Valor USD: $642,643.00
+
+------------------------------------------------------------
+📋 POR KPI:
+------------------------------------------------------------
+   DC001 NB: 593 oportunidades ($276,699)
+   DC002 NB: 393 oportunidades ($11,787)
+   DC003: 164 oportunidades ($77,954)
+   DC008: 149 oportunidades ($154,610)
+   DC010: 115 oportunidades ($7)
+   DC001 CHURN: 54 oportunidades ($77,651)
+   DC002 CHURN: 20 oportunidades ($38,396)
+   DC004: 15 oportunidades ($0)
+   DC005: 10 oportunidades ($5,478)
+   DC011: 10 oportunidades ($61)
+
+------------------------------------------------------------
+👤 TOP 10 RESPONSABLES:
+------------------------------------------------------------
+   1. Herbert Oliveira: 296 oportunidades ($169,269)
+   2. Arnaldo Mendes: 196 oportunidades ($11,861)
+   3. Dayane Gomes: 167 oportunidades ($207,333)
+   4. Cesar Cespedes: 153 oportunidades ($1,037)
+   5. D. Marincovich/Nefi Flores: 148 oportunidades ($90,015)
+   6. Alessandra Pereira: 120 oportunidades ($23,704)
+   7. Carla Obregón: 119 oportunidades ($1,535)
+   8. Renato Perdona: 109 oportunidades ($2,580)
+   9. Diana Galan: 61 oportunidades ($20,255)
+   10. Mileny Valera: 38 oportunidades ($0)
+
+------------------------------------------------------------
+📊 DETALLE POR KPI Y RESPONSABLE:
+------------------------------------------------------------
+
+   [DC001 CHURN]
+      • D. Marincovich/Nefi Flores: 51
+      • Jhaset Ortega/Luz Bautista: 2
+      • Herbert Oliveira: 1
+
+   [DC001 NB]
+      • Herbert Oliveira: 291
+      • Renato Perdona: 88
+      • Arnaldo Mendes: 69
+      • Carla Obregón: 50
+      • Cesar Cespedes: 24
+      • Lauren Martins: 19
+      • Nicolas Correia: 16
+      • Alessandra Pereira: 12
+      • Miguel Poveda: 8
+      • D. Marincovich/Nefi Flores: 6
+      • Fabio Presentado: 6
+      • Mariana Jaramillo: 2
+      • Diego Marincovich: 1
+      • Fabio Moscoloni: 1
+
+   [DC002 CHURN]
+      • Dayane Gomes: 15
+      • Ludmila Prado/Elvis Dantas: 4
+      • Diana Galan: 1
+
+   [DC002 NB]
+      • Cesar Cespedes: 128
+      • Arnaldo Mendes: 74
+      • Carla Obregón: 69
+      • Alessandra Pereira: 41
+      • Mileny Valera: 38
+      • Diana Galan: 19
+      • Renato Perdona: 7
+      • Fausto Hamada: 5
+      • Dayane Gomes: 4
+      • Fabio Presentado: 4
+      • Armando Hernandez: 2
+
+   [DC003]
+      • Alessandra Pereira: 67
+      • Arnaldo Mendes: 43
+      • Dayane Gomes: 24
+      • Renato Perdona: 14
+      • Cecilia Vega: 10
+      • Fausto Hamada: 3
+      • Cesar Cespedes: 1
+      • Mariana Jaramillo/Victor Romero: 1
+
+   [DC004]
+      • Diana Galan: 12
+      • Dayane Gomes: 3
+
+   [DC005]
+      • Arnaldo Mendes: 10
+
+   [DC008]
+      • Dayane Gomes: 120
+      • Diana Galan: 29
+
+   [DC010]
+      • D. Marincovich/Nefi Flores: 91
+      • Edgar Lara: 7
+      • Herbert Oliveira: 4
+      • Ludmila Prado/Elvis Dantas: 4
+      • Lauren Martins: 3
+      • L. Sanchez/L. Rodriguez/N. Cazares: 2
+      • Dayane Gomes: 1
+      • Nicolas Correia: 1
+
+============================================================

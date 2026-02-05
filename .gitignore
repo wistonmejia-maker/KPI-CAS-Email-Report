@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Data (Sensitive & Large)
+data/raw/*.csv
+*.csv
+*.xlsx
+/reports/emails/*.html
+
+# Logs
+*.log
+weekly_run_*.log
+
+# IDEs
+.vscode/
+.idea/
+.gemini/
+
+# Artifacts
+C:/Users/MejIA/.gemini/antigravity/brain/
