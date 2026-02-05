@@ -306,7 +306,7 @@ def generar_html_profesional(df, deltas=None):
             # Color basado en si es CHURN o no (Colores ATC)
             badge_color = '#E21F26' if 'CHURN' in kpi_name else '#003764'
             kpi_short = kpi_name.replace(' NB', '').replace(' CHURN', 'C')
-            kpi_badges += f'<span style="display:inline-block; background-color:{badge_color}; color:#fff; font-size:8px; padding:1px 4px; border-radius:3px; margin-right:2px;">{kpi_short}:{kpi_count}</span>'
+            kpi_badges += f'<span style="display:inline-block; background-color:{badge_color}; color:#fff; font-size:8px; padding:1px 4px; border-radius:3px; margin-right:2px;">{kpi_short}: {kpi_count}</span>'
         
         html += f'''                                <tr>
                                     <td style="padding:6px 0;">
