@@ -10,6 +10,25 @@ from datetime import datetime
 
 
 
+
+# =============================================================================
+# DESCRIPCIONES DE KPIS
+# =============================================================================
+KPI_DESCRIPTIONS = {
+    'DC001 NB': ('Aging Control (NB) >9 months', 'Tiempo desde creación'),
+    'DC001 CHURN': ('Aging Control (Churn) >12 months', 'Tiempo desde creación'),
+    'DC002 NB': ('Expired Opportunities (NB)', 'Fecha Forecast Vencida'),
+    'DC002 CHURN': ('Expired Opportunities (Churn)', 'Fecha Forecast Vencida'),
+    'DC003': ('On Hold Opportunities', 'En espera'),
+    'DC004': ('Reported to Finance w/o Revenue', 'Sin ingresos reportados'),
+    'DC005': ('Conversion w/o Sales Process', 'Conversión acelerada'),
+    'DC007': ('Change Management', 'Cambio de gestión'),
+    'DC008': ('Aging Reported to Finance >30 days', 'Tiempo en Finanzas'),
+    'DC010': ('Amount Zero', 'Monto cero'),
+    'DC011': ('Actual Roles & Responsibilities', 'Cambio de roles')
+}
+
+
 def calcular_deltas(df_actual, df_anterior):
     """Calcula los deltas entre el archivo actual y el anterior"""
     if df_anterior is None:
