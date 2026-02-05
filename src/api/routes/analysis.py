@@ -332,4 +332,4 @@ async def upload_and_analyze(
         error_msg = f"Error en upload_and_analyze: {str(e)}\n{traceback.format_exc()}"
         logger.error(error_msg)
         print(error_msg)
-        raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error interno (Debug): {str(e)} \nTraceback: {traceback.format_exc()}")
