@@ -15,6 +15,7 @@ import sys
 from pathlib import Path
 from datetime import datetime
 import logging
+import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -81,8 +82,13 @@ app.add_middleware(
 app.include_router(analysis_router)
 
 # Mount static files (Frontend)
-# Esto permite servir public/index.html en /
-app.mount("/", StaticFiles(directory="public", html=True), name="public")
+# ERROR: En Vercel, Python no debe servir estáticos (lo hace el CDN).
+# Descomentar solo para desarrollo local si no usas live server.
+if os.getenv("VERCEL") != "1":
+    try:
+        app.mount("/", StaticFiles(directory="public", html=True), name="public")
+    except Exception:
+        pass
 
 
 @app.get("/", tags=["Root"])
