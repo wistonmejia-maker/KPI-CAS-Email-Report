@@ -252,21 +252,22 @@
                 <input type="file" id="currentFile" accept=".csv">
                 <div class="file-info" id="currentInfo"></div>
 
-                <!-- Region Filter -->
-                <div style="margin-top:16px; border-top:1px dashed #cbd5e1; padding-top:12px; text-align:left;"
-                    onclick="event.stopPropagation()">
-                    <label
-                        style="font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:4px;">Filtrar
-                        Región (Opcional)</label>
-                    <select id="regionFilter"
-                        style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; color:#0f172a; outline:none;"
-                        onclick="event.stopPropagation()">
-                        <option value="CAS" selected>CAS (Sin Brasil/Mexico)</option>
-                        <option value="Brasil">Brasil</option>
-                        <option value="Mexico">Mexico</option>
-                        <option value="Todas">Todas las Regiones</option>
-                    </select>
-                </div>
+                <!-- Region Filter Removed from here -->
+            </div>
+
+            <!-- Region Filter (Moved Outside) -->
+            <div
+                style="margin-top:0px; border:1px solid #e2e8f0; border-top:none; border-radius:0 0 12px 12px; padding:16px; background:#f8fafc; text-align:left; margin-bottom:20px;">
+                <label style="font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:4px;">
+                    🌍 Filtrar Región (Opcional)
+                </label>
+                <select id="regionFilter"
+                    style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px; color:#0f172a; outline:none; background:white; cursor:pointer;">
+                    <option value="CAS" selected>CAS (Sin Brasil/Mexico)</option>
+                    <option value="Brasil">Brasil</option>
+                    <option value="Mexico">Mexico</option>
+                    <option value="Todas">Todas las Regiones</option>
+                </select>
             </div>
 
             <!-- Optional Previous File -->

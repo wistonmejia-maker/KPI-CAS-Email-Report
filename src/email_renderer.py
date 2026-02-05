@@ -133,7 +133,10 @@ def generar_html_profesional(df, deltas=None, region="CAS"):
     if deltas is None:
         deltas = {'total': None, 'por_responsable': {}, 'por_pais': {}, 'por_kpi': {}}
     fecha = datetime.now().strftime("%d/%m/%Y")
-    trimestre = f"Q{(datetime.now().month - 1) // 3 + 1} {datetime.now().year}"
+    theta = f"Q{(datetime.now().month - 1) // 3 + 1} {datetime.now().year}"
+    
+    # Keep copy for debug
+    df_original = df.copy()
     
     # Filtrar por Región (si aplica y si existe la columna)
     if region and region != "Todas":
