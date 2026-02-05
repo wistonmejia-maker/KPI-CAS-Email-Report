@@ -152,6 +152,30 @@ def generar_html_profesional(df, deltas=None, region="CAS"):
             # Normalizar columna y valor filtro
             mask = df[region_col].astype(str).str.lower().str.strip() == filter_val.lower().strip()
             df = df[mask]
+            
+            # DEBUG UI: Si el filtro deja vacia la data, mostrar error informativo
+            if len(df) == 0:
+                unique_vals = sorted(df_original[region_col].unique().tolist()) if region_col else []
+                return f"""
+                <div style="padding:40px; font-family:sans-serif; text-align:center; color:#334155;">
+                    <h1 style="color:#ef4444; font-size:24px;">⚠️ No se encontraron resultados</h1>
+                    <p style="font-size:16px;">
+                        Has seleccionado la región: <strong>"{region}"</strong><br>
+                        (Valor buscado internamente: <em>"{filter_val}"</em>)
+                    </p>
+                    <div style="background:#f1f5f9; padding:20px; border-radius:12px; display:inline-block; text-align:left; max-width:500px;">
+                        <p style="margin-top:0; font-weight:700;">Diagnóstico:</p>
+                        <ul style="margin-bottom:0; font-size:14px; line-height:1.6;">
+                            <li>Columna detectada en el CSV: <code>{region_col}</code></li>
+                            <li>Valores disponibles en esa columna:</li>
+                            <ul>
+                                {''.join([f'<li>{v}</li>' for v in unique_vals[:20]])}
+                                {f'<li>... y {len(unique_vals)-20} más</li>' if len(unique_vals) > 20 else ''}
+                            </ul>
+                        </ul>
+                    </div>
+                </div>
+                """
         elif region == "CAS":
             # Fallback si no hay columna Region pero se pide CAS (excluir BR/MX)
             df = df[~df['Market'].isin(['Brasil', 'Mexico'])]
