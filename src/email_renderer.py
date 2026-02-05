@@ -125,7 +125,7 @@ def formato_delta(delta, invertir=False, on_dark=False):
               </span>'''
 
 
-def generar_html_profesional(df, deltas=None, region="Spanish Latam"):
+def generar_html_profesional(df, deltas=None, region="CAS"):
     """
     Genera HTML con diseño VisActor para email ejecutivo.
     Incluye opción de filtro por Región.
@@ -138,10 +138,12 @@ def generar_html_profesional(df, deltas=None, region="Spanish Latam"):
     # Filtrar por Región (si aplica y si existe la columna)
     if region and region != "Todas" and 'Region' in df.columns:
         # Mapeo simple o uso directo si los valores coinciden
-        # Asumiendo que "Spanish Latam" es el valor exacto en la data
-        df = df[df['Region'] == region]
-    elif not 'Region' in df.columns and region == "Spanish Latam":
-        # Fallback si no hay columna Region pero se pide Spanish Latam (excluir BR/MX)
+        # Asumiendo que "CAS" es el valor exacto en la data si se usa ese filtro
+        # Si la data usa "Spanish Latam" pero la UI dice "CAS", aqui deberiamos ajustar
+        filter_val = "Spanish Latam" if region == "CAS" else region
+        df = df[df['Region'] == filter_val]
+    elif not 'Region' in df.columns and region == "CAS":
+        # Fallback si no hay columna Region pero se pide CAS (excluir BR/MX)
         df = df[~df['Market'].isin(['Brasil', 'Mexico'])]
     
     total_opps = len(df)

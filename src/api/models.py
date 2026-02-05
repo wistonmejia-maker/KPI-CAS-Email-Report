@@ -40,8 +40,8 @@ class AnalysisRequest(BaseModel):
         description="Generar emails individuales por responsable"
     )
     region: Optional[str] = Field(
-        default="Spanish Latam",
-        description="Filtro de región (ej: Spanish Latam, Brasil, Mexico, All)"
+        default="CAS",
+        description="Filtro de región (ej: CAS, Brasil, Mexico, All)"
     )
 
 
