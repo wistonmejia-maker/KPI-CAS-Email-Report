@@ -27,9 +27,7 @@ from src.config import KPI_CATEGORIES, COLUMNS, SNAPSHOTS_DIR
 from src.data_loader import DataLoader, load_opportunities
 from src.change_detector import compare_datasets
 from src.metrics import MetricsCalculator
-from src.report_generator import generate_weekly_report
 from src.email_renderer import generar_html_profesional, calcular_deltas
-from src.infographic.visual_card import generate_executive_card
 
 logger = logging.getLogger(__name__)
 
