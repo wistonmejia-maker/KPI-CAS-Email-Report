@@ -10,7 +10,7 @@ from typing import Optional
 import threading
 import logging
 
-from fastapi import APIRouter, HTTPException, BackgroundTasks, UploadFile, File
+from fastapi import APIRouter, HTTPException, BackgroundTasks, UploadFile, File, Form
 from fastapi.responses import FileResponse, HTMLResponse
 import shutil
 import os
@@ -279,7 +279,9 @@ async def get_job_card(job_id: str):
 @router.post("/upload-and-analyze", response_class=HTMLResponse)
 async def upload_and_analyze(
     current_file: UploadFile = File(...),
-    previous_file: Optional[UploadFile] = File(None)
+
+    previous_file: Optional[UploadFile] = File(None),
+    region: str = Form("CAS")
 ):
     """
     Recibe archivos CSV (actual y opcional previo), ejecuta el análisis 
@@ -330,7 +332,7 @@ async def upload_and_analyze(
                 
         # 6. Generar HTML (Profesional / Email)
         # generar_html_profesional devuelve el string directamente
-        html_content = generar_html_profesional(df, deltas)
+        html_content = generar_html_profesional(df, deltas, region=region)
         
         # 7. Limpieza
         try:
