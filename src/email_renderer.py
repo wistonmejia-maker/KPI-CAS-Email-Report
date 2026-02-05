@@ -7,51 +7,7 @@ import pandas as pd
 from pathlib import Path
 from datetime import datetime
 
-# Configuración
-DATA_DIR = Path(__file__).parent / "data" / "raw"
 
-# Descripciones de KPIs
-KPI_DESCRIPTIONS = {
-    'DC001 NB': ('AGING CONTROL', 'Opps creadas > 9 meses (rev 0)'),
-    'DC001 CHURN': ('AGING CONTROL', 'Opps creadas > 12 meses (rev 0)'),
-    'DC002 NB': ('EXPIRED OPPS', 'Forecast anterior al cierre (exchange rate calendar)'),
-    'DC002 CHURN': ('EXPIRED OPPS', 'Forecast anterior al cierre (full month)'),
-    'DC003': ('ON HOLD', 'Opps en hold - Tab Concepts & Refresh Schedule'),
-    'DC004': ('FINANCE W/O REVENUE', 'Opps sin revenue que deben ir a ready to bill'),
-    'DC005': ('CONVERSION W/O SALES', 'Convertidas en < X días (Collo 2d, BTS 1d)'),
-    'DC007': ('CHANGE MANAGEMENT', 'Opps creadas por otras áreas (no ventas)'),
-    'DC008': ('AGING REPORTED TO FINANCE', 'Opps > 30 días en reported to finance'),
-    'DC010': ('AMOUNT ZERO', 'Opps con Amount = 0, Excl ToP=TRUE, Sales Deal'),
-    'DC011': ('ROLES & RESPONSIBILITIES', 'Opps que cambiaron a Actual (últimos 30 días)'),
-}
-
-
-def cargar_ultimo_csv():
-    """Carga el archivo CSV más reciente"""
-    csv_files = sorted(DATA_DIR.glob("*.csv"), reverse=True)
-    if not csv_files:
-        csv_files = sorted(Path(__file__).parent.glob("*.csv"), reverse=True)
-    
-    if not csv_files:
-        print("❌ No se encontró ningún archivo CSV")
-        return None
-    
-    print(f"📂 Cargando: {csv_files[0].name}")
-    return pd.read_csv(csv_files[0], encoding='utf-8')
-
-
-def cargar_csv_anterior():
-    """Carga el segundo archivo CSV más reciente para comparación"""
-    csv_files = sorted(DATA_DIR.glob("*.csv"), reverse=True)
-    if not csv_files:
-        csv_files = sorted(Path(__file__).parent.glob("*.csv"), reverse=True)
-    
-    if len(csv_files) < 2:
-        print("ℹ️ No hay archivo anterior para comparar")
-        return None
-    
-    print(f"📂 Comparando con: {csv_files[1].name}")
-    return pd.read_csv(csv_files[1], encoding='utf-8')
 
 
 def calcular_deltas(df_actual, df_anterior):
@@ -624,35 +580,3 @@ def generar_html_profesional(df, deltas=None):
     return html
 
 
-def main():
-    print("\n" + "=" * 60)
-    print("🚀 GENERADOR DE RESUMEN PARA EMAIL")
-    print("   Diseño: Dashboard Ejecutivo + Comparativa")
-    print("=" * 60 + "\n")
-    
-    # Cargar datos actual y anterior
-    df = cargar_ultimo_csv()
-    if df is None:
-        return
-    
-    df_anterior = cargar_csv_anterior()
-    
-    # Calcular deltas
-    deltas = calcular_deltas(df, df_anterior)
-    
-    # Generar HTML profesional con deltas
-    html = generar_html_profesional(df, deltas)
-    
-    # Guardar
-    output_html = Path(__file__).parent / "reports" / "emails" / "resumen_email.html"
-    output_html.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_html, 'w', encoding='utf-8') as f:
-        f.write(html)
-    
-    print(f"✅ Archivo HTML guardado: {output_html}")
-    print("\n💡 Abre el archivo en tu navegador, selecciona todo (Ctrl+A)")
-    print("   y copia (Ctrl+C) para pegarlo en Outlook con formato.\n")
-
-
-if __name__ == "__main__":
-    main()
